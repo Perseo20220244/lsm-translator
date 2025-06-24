@@ -12,29 +12,29 @@ const App: React.FC = () => {
         <Navbar isBordered>
           <NavbarBrand>
             <Icon icon="lucide:sign-language" width="24" height="24" />
-            <p className="font-bold text-inherit">LSM Translator</p>
+            <p className="font-bold text-inherit">Traductor LSM</p>
           </NavbarBrand>
           <NavbarContent className="hidden sm:flex gap-4" justify="center">
             <NavbarItem>
               <Link color="foreground" href="/">
-                Live Session
+                Sesión en Vivo
               </Link>
             </NavbarItem>
             <NavbarItem>
               <Link color="foreground" href="/dashboard">
-                Dashboard
+                Panel de Control
               </Link>
             </NavbarItem>
             <NavbarItem>
               <Link color="foreground" href="/classroom">
-                Classroom Mode
+                Modo Aula
               </Link>
             </NavbarItem>
           </NavbarContent>
           <NavbarContent justify="end">
             <NavbarItem>
               <Button as={Link} color="primary" href="#" variant="flat">
-                Sign Up
+                Registrarse
               </Button>
             </NavbarItem>
           </NavbarContent>

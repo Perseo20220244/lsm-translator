@@ -20,27 +20,27 @@ export const ClassroomMode: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Classroom Mode</h1>
+      <h1 className="text-2xl font-bold">Sesión de Salón</h1>
       
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">Calibration</h2>
+          <h2 className="text-xl font-semibold">Calibración</h2>
         </CardHeader>
         <CardBody className="space-y-4">
           <Progress 
-            aria-label="Calibration progress" 
+            aria-label="Progreso de calibración"
             value={(calibrationStep / 3) * 100} 
             className="max-w-md"
           />
           <div className="space-y-2">
             {calibrationStep === 1 && (
-              <p>Step 1: Please stand in the center of the camera frame.</p>
+              <p>Paso 1: Por favor, colócate en el centro del encuadre de la cámara.</p>
             )}
             {calibrationStep === 2 && (
-              <p>Step 2: Perform a simple sign (e.g., "Hello") three times.</p>
+              <p>Paso 2: Realiza una seña simple (ej: "Hola") tres veces.</p>
             )}
             {calibrationStep === 3 && (
-              <p>Step 3: System is fine-tuning. Please wait...</p>
+              <p>Paso 3: El sistema se está ajustando. Por favor espera...</p>
             )}
           </div>
           <div className="flex space-x-2">
@@ -50,14 +50,14 @@ export const ClassroomMode: React.FC = () => {
               onPress={handleCalibrationPrev}
               isDisabled={calibrationStep === 1}
             >
-              Previous
+              Anterior
             </Button>
             <Button 
               color="primary" 
               onPress={handleCalibrationNext}
               isDisabled={calibrationStep === 3}
             >
-              {calibrationStep === 3 ? 'Finish' : 'Next'}
+              {calibrationStep === 3 ? 'Finalizar' : 'Siguiente'}
             </Button>
           </div>
         </CardBody>
@@ -65,7 +65,7 @@ export const ClassroomMode: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <h2 className="text-xl font-semibold">Live Translation</h2>
+          <h2 className="text-xl font-semibold">Traducción en Vivo</h2>
         </CardHeader>
         <CardBody>
           <div className="aspect-video bg-gray-200 mb-4 rounded-lg flex items-center justify-center relative">
@@ -78,16 +78,16 @@ export const ClassroomMode: React.FC = () => {
           </div>
           <div className="space-y-4">
             <div>
-              <h3 className="text-lg font-semibold mb-2">Translated Text</h3>
+              <h3 className="text-lg font-semibold mb-2">Texto Traducido</h3>
               <p className="p-4 bg-content2 rounded-lg text-3xl text-center">
-                The translated text will appear here.
+                El texto traducido aparecerá aquí.
               </p>
             </div>
             <div className="flex justify-center space-x-4">
               <Button
                 isIconOnly
                 color={isPaused ? "warning" : "success"}
-                aria-label={isPaused ? "Resume" : "Pause"}
+                aria-label={isPaused ? "Reanudar" : "Pausar"}
                 onPress={togglePause}
               >
                 <Icon icon={isPaused ? "lucide:play" : "lucide:pause"} className="text-2xl" />
@@ -95,7 +95,7 @@ export const ClassroomMode: React.FC = () => {
               <Button
                 isIconOnly
                 color="danger"
-                aria-label="Stop"
+                aria-label="Detener"
               >
                 <Icon icon="lucide:square" className="text-2xl" />
               </Button>

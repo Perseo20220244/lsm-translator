@@ -7,22 +7,22 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
+      <h1 className="text-2xl font-bold">Panel de Control</h1>
       
       <Tabs 
-        aria-label="Dashboard options" 
+        aria-label="Opciones del panel"
         selectedKey={selectedTab} 
         onSelectionChange={setSelectedTab as any}
       >
-        <Tab key="history" title="User History">
+        <Tab key="history" title="Historial de Usuario">
           <Card>
             <CardBody>
-              <Table aria-label="User history" removeWrapper>
+              <Table aria-label="Historial de usuario" removeWrapper>
                 <TableHeader>
-                  <TableColumn>DATE</TableColumn>
-                  <TableColumn>SESSION DURATION</TableColumn>
-                  <TableColumn>WORDS TRANSLATED</TableColumn>
-                  <TableColumn>AVG. CONFIDENCE</TableColumn>
+                  <TableColumn>FECHA</TableColumn>
+                  <TableColumn>DURACIÓN DE SESIÓN</TableColumn>
+                  <TableColumn>PALABRAS TRADUCIDAS</TableColumn>
+                  <TableColumn>CONFIANZA PROMEDIO</TableColumn>
                 </TableHeader>
                 <TableBody>
                   <TableRow key="1">
@@ -43,47 +43,47 @@ export const Dashboard: React.FC = () => {
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="settings" title="Settings">
+        <Tab key="settings" title="Configuración">
           <Card>
             <CardBody className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold mb-2">Voice Settings</h2>
+                <h2 className="text-lg font-semibold mb-2">Configuración de Voz</h2>
                 <Select 
-                  label="Select Voice" 
-                  placeholder="Choose a voice"
+                  label="Seleccionar Voz" 
+                  placeholder="Elige una voz"
                   className="max-w-xs"
                 >
-                  <SelectItem key="voice1">Voice 1 (Default)</SelectItem>
-                  <SelectItem key="voice2">Voice 2</SelectItem>
-                  <SelectItem key="voice3">Voice 3</SelectItem>
+                  <SelectItem key="voice1">Voz 1 (Predeterminada)</SelectItem>
+                  <SelectItem key="voice2">Voz 2</SelectItem>
+                  <SelectItem key="voice3">Voz 3</SelectItem>
                 </Select>
               </div>
               <div>
-                <h2 className="text-lg font-semibold mb-2">Font Settings</h2>
+                <h2 className="text-lg font-semibold mb-2">Configuración de Fuente</h2>
                 <Select 
-                  label="Select Font" 
-                  placeholder="Choose a font"
+                  label="Seleccionar Fuente" 
+                  placeholder="Elige una fuente"
                   className="max-w-xs"
                 >
-                  <SelectItem key="font1">Sans-serif (Default)</SelectItem>
+                  <SelectItem key="font1">Sans-serif (Predeterminada)</SelectItem>
                   <SelectItem key="font2">Serif</SelectItem>
                   <SelectItem key="font3">Monospace</SelectItem>
                 </Select>
               </div>
-              <Button color="primary">Save Settings</Button>
+              <Button color="primary">Guardar Configuración</Button>
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="admin" title="Admin Controls">
+        <Tab key="admin" title="Controles de Administración">
           <Card>
             <CardBody className="space-y-4">
               <div>
-                <h2 className="text-lg font-semibold mb-2">System Metrics</h2>
+                <h2 className="text-lg font-semibold mb-2">Métricas del Sistema</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card>
                     <CardBody>
                       <div className="flex items-center justify-between">
-                        <span>Active Users</span>
+                        <span>Usuarios Activos</span>
                         <span className="text-2xl font-bold">1,234</span>
                       </div>
                     </CardBody>
@@ -91,7 +91,7 @@ export const Dashboard: React.FC = () => {
                   <Card>
                     <CardBody>
                       <div className="flex items-center justify-between">
-                        <span>Avg. Session Time</span>
+                        <span>Tiempo Promedio de Sesión</span>
                         <span className="text-2xl font-bold">00:32:18</span>
                       </div>
                     </CardBody>
@@ -99,7 +99,7 @@ export const Dashboard: React.FC = () => {
                   <Card>
                     <CardBody>
                       <div className="flex items-center justify-between">
-                        <span>Total Translations</span>
+                        <span>Total de Traducciones</span>
                         <span className="text-2xl font-bold">1,567,890</span>
                       </div>
                     </CardBody>
@@ -107,12 +107,12 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
               <div>
-                <h2 className="text-lg font-semibold mb-2">User Management</h2>
+                <h2 className="text-lg font-semibold mb-2">Gestión de Usuarios</h2>
                 <div className="flex space-x-2">
-                  <Input placeholder="Search users" />
+                  <Input placeholder="Buscar usuarios" />
                   <Button color="primary">
                     <Icon icon="lucide:user-plus" className="mr-2" />
-                    Add User
+                    Agregar Usuario
                   </Button>
                 </div>
                 {/* User list table would go here */}

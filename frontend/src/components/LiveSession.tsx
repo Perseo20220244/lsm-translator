@@ -23,11 +23,11 @@ export const LiveSession: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card className="col-span-1 md:col-span-2">
         <CardHeader className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Live Translation Session</h1>
+          <h1 className="text-2xl font-bold">Sesión de Traducción en Vivo</h1>
           <div className="flex items-center space-x-2">
             <Icon icon={isSessionActive ? "lucide:video" : "lucide:video-off"} className={isSessionActive ? "text-success" : "text-danger"} />
             <span className={isSessionActive ? "text-success" : "text-danger"}>
-              {isSessionActive ? "Connected" : "Disconnected"}
+              {isSessionActive ? "Conectado" : "Desconectado"}
             </span>
           </div>
         </CardHeader>
@@ -37,35 +37,35 @@ export const LiveSession: React.FC = () => {
             {isRecording && (
               <div className="absolute top-2 right-2 flex items-center space-x-2 bg-danger text-white px-2 py-1 rounded-full">
                 <Icon icon="lucide:record-video" className="animate-pulse" />
-                <span className="text-sm">Recording</span>
+                <span className="text-sm">Grabando</span>
               </div>
             )}
           </div>
           <div className="space-y-4">
             <div>
-              <h2 className="text-lg font-semibold mb-2">Translated Text</h2>
+              <h2 className="text-lg font-semibold mb-2">Texto Traducido</h2>
               <p className="p-4 bg-content2 rounded-lg">
-                {isSessionActive ? "The translated text will appear here in real-time." : "Start a session to begin translation."}
+                {isSessionActive ? "El texto traducido aparecerá aquí en tiempo real." : "Inicia una sesión para comenzar la traducción."}
               </p>
             </div>
             <div className="flex space-x-2">
               {!isSessionActive ? (
                 <Button color="success" onPress={handleStartSession}>
                   <Icon icon="lucide:play" className="mr-2" />
-                  Start Session
+                  Iniciar Sesión
                 </Button>
               ) : (
                 <>
                   <Button color="danger" onPress={handleEndSession}>
                     <Icon icon="lucide:stop" className="mr-2" />
-                    End Session
+                    Finalizar Sesión
                   </Button>
                   <Button
                     color={isRecording ? "warning" : "primary"}
                     onPress={handleToggleRecording}
                   >
                     <Icon icon={isRecording ? "lucide:pause" : "lucide:record-video"} className="mr-2" />
-                    {isRecording ? "Pause Recording" : "Start Recording"}
+                    {isRecording ? "Pausar Grabación" : "Iniciar Grabación"}
                   </Button>
                 </>
               )}
