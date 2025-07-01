@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardBody, CardHeader, Button } from "@heroui/react";
 import { Icon } from '@iconify/react';
 
 export const LiveSession: React.FC = () => {
-  const [isSessionActive, setIsSessionActive] = React.useState(false);
-  const [isRecording, setIsRecording] = React.useState(false);
-  const [cameraError, setCameraError] = React.useState<string | null>(null);
-  const [stream, setStream] = React.useState<MediaStream | null>(null);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  // --- Estados existentes ---
+  const [isSessionActive, setIsSessionActive] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // --- NUEVOS ESTADOS Y REFS para WebSocket y Traducción ---
+  const [translatedText, setTranslatedText] = useState<string>('');
+  const socketRef = useRef<WebSocket | null>(null);
+  const intervalRef = useRef<number | null>(null);
+
+  // --- Función para enviar un frame al backend ---
+  const sendFrame = () => {
+    // Asegurarse de que el video esté listo y el socket esté abierto
+    if (videoRef.current && socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      const ctx = canvas.getContext('2d');
+      
+      if (ctx) {
+        // Dibuja el frame actual del video en el canvas
+        ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+        // Convierte el canvas a una imagen en formato base64 (JPEG)
+        const data = canvas.toDataURL('image/jpeg', 0.8); // Calidad del 80%
+        // Envía los datos a través del WebSocket
+        socketRef.current.send(data);
+      }
+    }
+  };
 
   const startCamera = async () => {
     try {
@@ -27,7 +53,7 @@ export const LiveSession: React.FC = () => {
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      setCameraError('Could not access camera. Please ensure camera permissions are granted.');
+      setCameraError('No se pudo acceder a la cámara. Asegúrate de conceder los permisos.');
     }
   };
 
@@ -43,23 +69,70 @@ export const LiveSession: React.FC = () => {
 
   const handleStartSession = async () => {
     setIsSessionActive(true);
+    setTranslatedText(''); // Limpiar texto anterior
     await startCamera();
+
+    // --- Lógica para conectar el WebSocket ---
+    socketRef.current = new WebSocket("ws://localhost:5000/ws");
+
+    socketRef.current.onopen = () => {
+      console.log("WebSocket conectado exitosamente.");
+      // Inicia el envío de frames cada 100ms
+      intervalRef.current = setInterval(() => {
+        sendFrame();
+      }, 100);
+    };
+
+    // Manejador para cuando se recibe un mensaje del servidor
+    socketRef.current.onmessage = (event) => {
+      const newWord = event.data;
+      console.log("Palabra recibida:", newWord);
+      // Añade la nueva palabra al principio de la oración
+      setTranslatedText(prevText => `${newWord} ${prevText}`);
+    };
+
+    socketRef.current.onclose = () => {
+      console.log("WebSocket desconectado.");
+      // Limpia el intervalo si el socket se cierra inesperadamente
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+
+    socketRef.current.onerror = (error) => {
+      console.error("Error en WebSocket:", error);
+      setCameraError("Error de conexión con el servidor de traducción.");
+    };
   };
 
   const handleEndSession = () => {
     setIsSessionActive(false);
     setIsRecording(false);
     stopCamera();
+
+    // --- Lógica para desconectar y limpiar ---
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (socketRef.current) {
+      socketRef.current.close();
+    }
   };
 
   const handleToggleRecording = () => {
     setIsRecording(!isRecording);
   };
 
-  // Cleanup on component unmount
-  React.useEffect(() => {
+  // --- Limpieza al desmontar el componente ---
+  useEffect(() => {
     return () => {
       stopCamera();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      if (socketRef.current) {
+        socketRef.current.close();
+      }
     };
   }, []);
 
@@ -91,7 +164,7 @@ export const LiveSession: React.FC = () => {
                 {cameraError ? (
                   <p className="text-danger text-center text-sm px-4">{cameraError}</p>
                 ) : (
-                  <p className="text-gray-500 text-center">Camera feed will appear here</p>
+                  <p className="text-gray-500 text-center">La señal de la cámara aparecerá aquí</p>
                 )}
               </div>
             )}
@@ -105,8 +178,9 @@ export const LiveSession: React.FC = () => {
           <div className="space-y-4">
             <div>
               <h2 className="text-lg font-semibold mb-2">Texto Traducido</h2>
-              <p className="p-4 bg-content2 rounded-lg">
-                {isSessionActive ? "El texto traducido aparecerá aquí en tiempo real." : "Inicia una sesión para comenzar la traducción."}
+              {/* --- ÁREA DE TEXTO MODIFICADA --- */}
+              <p className="p-4 bg-content2 rounded-lg min-h-[50px] text-lg">
+                {translatedText || (isSessionActive ? "Escuchando..." : "Inicia una sesión para comenzar la traducción.")}
               </p>
             </div>
             <div className="flex space-x-2">
